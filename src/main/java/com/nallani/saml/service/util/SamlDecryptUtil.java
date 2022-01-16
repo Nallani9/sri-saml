@@ -15,11 +15,9 @@ public class SamlDecryptUtil {
     @Autowired
     private UrlDecodeUtil urlDecodeUtil;
 
-    public String decryptSaml(String samlData, boolean metadata) {
+    public String decryptSaml(String samlData) {
         try {
-            if (metadata) {
-                samlData = urlDecodeUtil.decode(samlData);
-            }
+            samlData = urlDecodeUtil.decode(samlData);
             byte[] decodedByte = Base64.getDecoder().decode(samlData);
             String decodedString = new String(decodedByte, StandardCharsets.UTF_8);
             logger.info(

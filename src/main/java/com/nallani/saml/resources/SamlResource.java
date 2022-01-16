@@ -1,9 +1,9 @@
 package com.nallani.saml.resources;
 
 import com.nallani.saml.model.GetAssertionRequest;
-import com.nallani.saml.model.SamlAttributesPayload;
 import com.nallani.saml.model.SamlRequest;
 import com.nallani.saml.model.SamlResponse;
+import com.nallani.saml.model.SamlValidateRequest;
 import com.nallani.saml.service.SamlService;
 import com.nallani.saml.service.validators.QueryParameterValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class SamlResource {
 
     @PostMapping(path = "/generate", consumes = "application/json", produces = "application/json")
     public SamlResponse generateSAML(
-            @RequestBody SamlAttributesPayload input,
+            @RequestBody SamlRequest input,
             @RequestHeader(value = IS_ENCRYPTED_PAYLOAD, defaultValue = "false") Boolean isEncryptedPayload,
             @RequestHeader(value = IS_RESPONSE_ENCODED, defaultValue = "true") Boolean isResponseEncoded,
             @RequestParam(SP) String spName) {
@@ -32,8 +32,8 @@ public class SamlResource {
     }
 
     @PostMapping(path = "/validate", consumes = "application/json", produces = "application/json")
-    public SamlAttributesPayload validateSAML(
-            @RequestBody SamlRequest samlRequest,
+    public SamlRequest validateSAML(
+            @RequestBody SamlValidateRequest samlRequest,
             @RequestParam(SP) String spName) {
 
         // validate mandatory query param

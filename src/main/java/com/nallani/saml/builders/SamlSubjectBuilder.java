@@ -1,7 +1,7 @@
 package com.nallani.saml.builders;
 
 import com.nallani.saml.model.SPMetadata;
-import com.nallani.saml.model.SamlAttributesPayload;
+import com.nallani.saml.model.SamlRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.*;
@@ -18,7 +18,7 @@ import static com.nallani.saml.service.constants.Constants.NAMESPACE_PREFIX;
 @Service
 public class SamlSubjectBuilder {
 
-    public Subject buildSubject(SamlAttributesPayload content, SPMetadata metadata) {
+    public Subject buildSubject(SamlRequest content, SPMetadata metadata) {
         Instant currentDate = Instant.now();
         currentDate = currentDate.plus(content.getSpMetadata().getNotOnOrAfter(), ChronoUnit.SECONDS);
 

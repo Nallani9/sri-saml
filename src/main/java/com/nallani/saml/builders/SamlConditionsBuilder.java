@@ -1,6 +1,6 @@
 package com.nallani.saml.builders;
 
-import com.nallani.saml.model.SamlAttributesPayload;
+import com.nallani.saml.model.SamlRequest;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.Audience;
 import org.opensaml.saml.saml2.core.AudienceRestriction;
@@ -18,7 +18,7 @@ import static com.nallani.saml.service.constants.Constants.NAMESPACE_PREFIX;
 @Service
 public class SamlConditionsBuilder {
 
-    public Conditions buildConditions(SamlAttributesPayload content) {
+    public Conditions buildConditions(SamlRequest content) {
         ConditionsBuilder conditionsBuilder = new ConditionsBuilder();
         Conditions conditions =
                 conditionsBuilder.buildObject(

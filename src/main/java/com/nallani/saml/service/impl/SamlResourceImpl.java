@@ -1,17 +1,15 @@
 package com.nallani.saml.service.impl;
 
 import com.nallani.saml.model.GetAssertionRequest;
-import com.nallani.saml.model.SamlAttributesPayload;
 import com.nallani.saml.model.SamlRequest;
 import com.nallani.saml.model.SamlResponse;
+import com.nallani.saml.model.SamlValidateRequest;
 import com.nallani.saml.service.SamlService;
 import com.nallani.saml.service.helper.SamlExpiryHelper;
 import com.nallani.saml.service.helper.SamlHelper;
 import com.nallani.saml.service.helper.SamlSignatureValidationHelper;
 import com.nallani.saml.service.util.*;
 import com.nallani.saml.service.validators.InputPayloadValidator;
-import com.nallani.saml.service.validators.MetadataValidator;
-import com.nallani.saml.service.validators.UserRequestDataRule;
 import lombok.extern.java.Log;
 import net.shibboleth.utilities.java.support.codec.HTMLEncoder;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -27,15 +25,11 @@ public class SamlResourceImpl implements SamlService {
     private static final Logger logger = LoggerFactory.getLogger(SamlResourceImpl.class);
 
     @Autowired
-    UserRequestDataRule userRequestDataRule;
-    @Autowired
     private InputPayloadValidator inputPayloadValidator;
     @Autowired
     private SamlHelper samlHelper;
     @Autowired
     private SamlUnmarshallUtil samlUnmarshallUtil;
-    @Autowired
-    private MetadataValidator metadataValidator;
     @Autowired
     private SamlSignatureValidationHelper signatureValidation;
     @Autowired
@@ -53,25 +47,19 @@ public class SamlResourceImpl implements SamlService {
 
     @Override
     public SamlResponse generateSaml(
-            SamlAttributesPayload input,
+            SamlRequest request,
             Boolean isEncryptedPayload,
             Boolean isResponseEncoded,
             String spName) {
 
-        // validate user inputs
-        userRequestDataRule.validateForGenerate(
-                input, isEncryptedPayload, spName);
         SamlResponse payload = null;
         try {
-            SamlResponse samlResponse = samlHelper.generateSAMLResponse(input, input.getSpMetadata());
+            SamlResponse samlResponse = samlHelper.generateSAMLResponse(request, request.getSpMetadata());
             samlResponse.setSamlResponse(
                     isResponseEncoded
                             ? HTMLEncoder.encodeForHTML(
                             samlEncryptUtil.encryptSaml(samlResponse.getSamlResponse()))
                             : samlEncryptUtil.encryptSaml(samlResponse.getSamlResponse()));
-            if (isResponseEncoded)
-                samlResponse.setRelayEndpoint(
-                        HTMLEncoder.encodeForHTML(samlResponse.getRelayEndpoint()));
             return samlResponse;
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -80,21 +68,18 @@ public class SamlResourceImpl implements SamlService {
     }
 
     @Override
-    public SamlAttributesPayload validateSaml(
-            SamlRequest samlRequest, String spName) {
-        // validate user inputs
-        userRequestDataRule.validateForValidate(samlRequest, spName);
-        SamlAttributesPayload payload = null;
+    public SamlRequest validateSaml(
+            SamlValidateRequest samlValidateRequest, String spName) {
+        SamlRequest payload = null;
         Response samlResponseObject;
         Assertion decryptedAssertion;
         String decryptedSaml;
         try {
             // Base64 decrypt saml
-            decryptedSaml = samlDecryptUtil.decryptSaml(samlRequest.getSamlResponse(), true);
-            samlRequest.setSamlResponse(decryptedSaml);
+            decryptedSaml = samlDecryptUtil.decryptSaml(samlValidateRequest.getSamlRequest());
             // unmarshall
             samlResponseObject =
-                    (Response) samlUnmarshallUtil.unmarshall(samlRequest.getSamlResponse());
+                    (Response) samlUnmarshallUtil.unmarshall(samlValidateRequest.getSamlRequest());
             // Validate signature
             signatureValidation.validate(samlResponseObject);
             // decrypt assertion
@@ -117,6 +102,6 @@ public class SamlResourceImpl implements SamlService {
         if (isUrlEncoded) {
             encodedSaml = urlDecodeUtil.encode(input.getSamlResponse());
         }
-        return samlDecryptUtil.decryptSaml(encodedSaml, isUrlEncoded);
+        return samlDecryptUtil.decryptSaml(encodedSaml);
     }
 }

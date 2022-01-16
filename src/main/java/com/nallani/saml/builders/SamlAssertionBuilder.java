@@ -1,7 +1,7 @@
 package com.nallani.saml.builders;
 
 import com.nallani.saml.model.SPMetadata;
-import com.nallani.saml.model.SamlAttributesPayload;
+import com.nallani.saml.model.SamlRequest;
 import net.shibboleth.utilities.java.support.security.impl.RandomIdentifierGenerationStrategy;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.Assertion;
@@ -28,7 +28,7 @@ public class SamlAssertionBuilder {
     @Autowired
     private com.nallani.saml.builders.SamlAttributeStatementBuilder samlAttributeStatementBuilder;
 
-    public Assertion buildAssertion(SamlAttributesPayload content, SPMetadata metadata) {
+    public Assertion buildAssertion(SamlRequest content, SPMetadata metadata) {
         AssertionBuilder assertionBuilder = new AssertionBuilder();
         Assertion assertion =
                 assertionBuilder.buildObject(

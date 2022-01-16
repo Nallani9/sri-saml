@@ -2,7 +2,7 @@ package com.nallani.saml.service.util;
 
 import com.nallani.saml.builders.*;
 import com.nallani.saml.model.SPMetadata;
-import com.nallani.saml.model.SamlAttributesPayload;
+import com.nallani.saml.model.SamlRequest;
 import lombok.extern.java.Log;
 import org.opensaml.saml.saml2.core.Assertion;
 import org.opensaml.saml.saml2.core.Response;
@@ -27,7 +27,7 @@ public class SamlGeneratorUtil {
     @Autowired
     private SamlSignResponseBuilder signResponseBuilder;
 
-    public Response generateSaml(SamlAttributesPayload content, SPMetadata metadata) {
+    public Response generateSaml(SamlRequest content, SPMetadata metadata) {
         // create the issuer/status & creating the response
         Response response =
                 responseBuilder.buildResponse(
@@ -35,7 +35,7 @@ public class SamlGeneratorUtil {
         // create the assertion
         Assertion assertion = samlAssertionBuilder.buildAssertion(content, metadata);
         if (metadata.isAssertionEncrypted()) {
-            // if rewards encrypt assertion and sign response
+            //encrypt assertion and sign response
             signResponseBuilder.signResponse(response, assertion);
         } else {
             // sign the assertion

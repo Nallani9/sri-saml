@@ -1,6 +1,6 @@
 package com.nallani.saml.builders;
 
-import com.nallani.saml.model.SamlAttributesPayload;
+import com.nallani.saml.model.SamlRequest;
 import com.nallani.saml.service.constants.Constants;
 import org.opensaml.saml.common.SAMLVersion;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -23,7 +23,7 @@ public class SamlResponseBuilder {
     @Value("${saml.version.minor:0}")
     private int samlVersionMinor;
 
-    public Response buildResponse(Issuer issuer, Status status, SamlAttributesPayload content) {
+    public Response buildResponse(Issuer issuer, Status status, SamlRequest content) {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         Response response =
                 responseBuilder.buildObject(

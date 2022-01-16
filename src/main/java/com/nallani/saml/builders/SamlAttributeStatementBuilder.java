@@ -1,7 +1,7 @@
 package com.nallani.saml.builders;
 
 import com.nallani.saml.model.SamlAttribute;
-import com.nallani.saml.model.SamlAttributesPayload;
+import com.nallani.saml.model.SamlRequest;
 import org.opensaml.core.xml.schema.XSString;
 import org.opensaml.core.xml.schema.impl.XSStringBuilder;
 import org.opensaml.saml.common.xml.SAMLConstants;
@@ -19,7 +19,7 @@ import static com.nallani.saml.service.constants.Constants.NAMESPACE_PREFIX;
 @Service
 public class SamlAttributeStatementBuilder {
 
-    public AttributeStatement buildAttributeStatement(SamlAttributesPayload content) {
+    public AttributeStatement buildAttributeStatement(SamlRequest payload) {
         // create authentication statement object
         AttributeStatementBuilder attributeStatementBuilder = new AttributeStatementBuilder();
         AttributeStatement attributeStatement =
@@ -29,7 +29,7 @@ public class SamlAttributeStatementBuilder {
                         NAMESPACE_PREFIX);
 
         AttributeBuilder attributeBuilder = new AttributeBuilder();
-        List<SamlAttribute> attributes = content.getAttributes();
+        List<SamlAttribute> attributes = payload.getSamlAttributes();
         if (attributes != null) {
             for (SamlAttribute entry : attributes) {
                 Attribute attribute =

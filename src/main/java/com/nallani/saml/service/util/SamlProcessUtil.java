@@ -2,7 +2,7 @@ package com.nallani.saml.service.util;
 
 
 import com.nallani.saml.model.SamlAttribute;
-import com.nallani.saml.model.SamlAttributesPayload;
+import com.nallani.saml.model.SamlRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.opensaml.core.xml.XMLObject;
@@ -19,8 +19,8 @@ import java.util.List;
 public class SamlProcessUtil {
     private final Logger logger = LogManager.getLogger(getClass());
 
-    public SamlAttributesPayload processResponse(Assertion assertion) {
-        SamlAttributesPayload output = new SamlAttributesPayload();
+    public SamlRequest processResponse(Assertion assertion) {
+        SamlRequest output = new SamlRequest();
         try {
             String subject = assertion.getSubject().getNameID().getValue();
             String issuer = assertion.getIssuer().getValue();
@@ -38,7 +38,7 @@ public class SamlProcessUtil {
                 SamlAttribute samlAttribute = new SamlAttribute();
                 samlAttribute.setName(attr.getName());
                 samlAttribute.setValue(values);
-                output.getAttributes().add(samlAttribute);
+                output.getSamlAttributes().add(samlAttribute);
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
