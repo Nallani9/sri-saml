@@ -4,8 +4,10 @@ public final class Constants {
 
     // REST
     public static final String IS_ENCRYPTED_PAYLOAD = "Is-Encrypted-Payload";
-    public static final String SP = "sp";
     public static final String IS_RESPONSE_ENCODED = "Is-Response-Encoded";
+    public static final String IS_HTML_ENCODED = "Is-Html-Encoded";
+    public static final String IS_URL_ENCODED = "Is-Url-Encoded";
+    public static final String SP = "sp";
     public static final String NAMESPACE_PREFIX = "saml";
     public static final String NAMESPACE_SAMLP = "samlp";
     public static final String AES_ALGORITHM = "AES";

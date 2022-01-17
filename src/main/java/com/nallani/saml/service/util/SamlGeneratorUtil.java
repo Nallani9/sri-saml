@@ -27,13 +27,13 @@ public class SamlGeneratorUtil {
     @Autowired
     private SamlSignResponseBuilder signResponseBuilder;
 
-    public Response generateSaml(SamlRequest content, SPMetadata metadata) {
+    public Response generateSaml(SamlRequest input, SPMetadata metadata) {
         // create the issuer/status & creating the response
         Response response =
                 responseBuilder.buildResponse(
-                        samlIssuerBuilder.buildIssuer(metadata), samlStatusBuilder.buildStatus(), content);
+                        samlIssuerBuilder.buildIssuer(metadata), samlStatusBuilder.buildStatus(), input);
         // create the assertion
-        Assertion assertion = samlAssertionBuilder.buildAssertion(content, metadata);
+        Assertion assertion = samlAssertionBuilder.buildAssertion(input, metadata);
         if (metadata.isAssertionEncrypted()) {
             //encrypt assertion and sign response
             signResponseBuilder.signResponse(response, assertion);

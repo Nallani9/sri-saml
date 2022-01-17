@@ -18,7 +18,7 @@ import static com.nallani.saml.service.constants.Constants.NAMESPACE_PREFIX;
 @Service
 public class SamlConditionsBuilder {
 
-    public Conditions buildConditions(SamlRequest content) {
+    public Conditions buildConditions(SamlRequest input) {
         ConditionsBuilder conditionsBuilder = new ConditionsBuilder();
         Conditions conditions =
                 conditionsBuilder.buildObject(
@@ -26,7 +26,7 @@ public class SamlConditionsBuilder {
         Instant currentDate = Instant.now();
         conditions.setNotBefore(currentDate);
         Instant updatedDate =
-                currentDate.plus(content.getSpMetadata().getNotOnOrAfter(), ChronoUnit.SECONDS);
+                currentDate.plus(input.getSpMetadata().getNotOnOrAfter(), ChronoUnit.SECONDS);
         conditions.setNotOnOrAfter(updatedDate);
 
         // Build Audience Restriction
@@ -43,7 +43,7 @@ public class SamlConditionsBuilder {
                 audienceBuilder.buildObject(
                         SAMLConstants.SAML20_NS, Audience.DEFAULT_ELEMENT_LOCAL_NAME, NAMESPACE_PREFIX);
         audience.setValue(
-                content.getSpMetadata().getSpNameQualifier()); // we need this for rewards to work
+                input.getSpMetadata().getSpNameQualifier());
         audienceRestriction.getAudiences().add(audience);
         conditions.getAudienceRestrictions().add(audienceRestriction);
         return conditions;

@@ -17,7 +17,6 @@ public class SamlDecryptUtil {
 
     public String decryptSaml(String samlData) {
         try {
-            samlData = urlDecodeUtil.decode(samlData);
             byte[] decodedByte = Base64.getDecoder().decode(samlData);
             String decodedString = new String(decodedByte, StandardCharsets.UTF_8);
             logger.info(

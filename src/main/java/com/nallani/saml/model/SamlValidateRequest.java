@@ -8,6 +8,6 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class SamlValidateRequest {
-    private String samlRequest;
+    private String samlResponse;
 
 }

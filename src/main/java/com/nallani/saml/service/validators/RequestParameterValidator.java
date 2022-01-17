@@ -6,12 +6,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
-public class QueryParameterValidator {
-    private static final Logger logger = LogManager.getLogger(QueryParameterValidator.class);
+public class RequestParameterValidator {
+    private static final Logger logger = LogManager.getLogger(RequestParameterValidator.class);
 
     public void validate(String queryParam) {
         if (StringUtils.isBlank(queryParam)) {
             logger.error(queryParam, "query parameter 'sp' can not be null");
+            throw new IllegalArgumentException("query parameter 'sp' can not be null");
         }
     }
 }

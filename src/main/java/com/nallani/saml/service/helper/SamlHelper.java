@@ -40,13 +40,12 @@ public class SamlHelper {
         return null;
     }
 
-    public SamlResponse generateSAMLResponse(SamlRequest content, SPMetadata metadata) throws MarshallingException {
+    public SamlResponse generateSAMLResponse(SamlRequest input, SPMetadata metadata) throws MarshallingException {
         SamlResponse response = new SamlResponse();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
         try {
             ResponseMarshaller marshaller = new ResponseMarshaller();
-            Response samlResp = samlGenerator.generateSaml(content, metadata);
+            Response samlResp = samlGenerator.generateSaml(input, metadata);
             Element element = marshaller.marshall(samlResp);
             SerializeSupport.writeNode(element, baos);
             response.setSamlResponse(baos.toString());

@@ -28,7 +28,7 @@ public class SamlAssertionBuilder {
     @Autowired
     private com.nallani.saml.builders.SamlAttributeStatementBuilder samlAttributeStatementBuilder;
 
-    public Assertion buildAssertion(SamlRequest content, SPMetadata metadata) {
+    public Assertion buildAssertion(SamlRequest input, SPMetadata metadata) {
         AssertionBuilder assertionBuilder = new AssertionBuilder();
         Assertion assertion =
                 assertionBuilder.buildObject(
@@ -37,18 +37,18 @@ public class SamlAssertionBuilder {
         Instant currentTime = Instant.now();
         assertion.setIssueInstant(currentTime);
 
-        assertion.setSubject(samlSubjectBuilder.buildSubject(content, metadata));
+        assertion.setSubject(samlSubjectBuilder.buildSubject(input, metadata));
         assertion.setIssuer(samlIssuerBuilder.buildIssuer(metadata));
         assertion.setIssueInstant(currentTime);
         assertion.setID(new RandomIdentifierGenerationStrategy().generateIdentifier());
         // create the conditions
-        assertion.setConditions(samlConditionsBuilder.buildConditions(content));
+        assertion.setConditions(samlConditionsBuilder.buildConditions(input));
         // create the authn Statement
         assertion.getAuthnStatements().add(samlAuthnStatementBuilder.buildAuthnStatement());
         // create the attribute Statement
         assertion
                 .getAttributeStatements()
-                .add(samlAttributeStatementBuilder.buildAttributeStatement(content));
+                .add(samlAttributeStatementBuilder.buildAttributeStatement(input));
         return assertion;
     }
 }
